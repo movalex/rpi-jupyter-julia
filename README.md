@@ -29,3 +29,16 @@ Here's a list of all packages available for Raspberry Pi via Conda:
     sqlalchemy, sphinx, sympy, toolz, tornado, twisted, werkzeug, wheel
 
 For further information see [Conda support for Raspberry Pi 2](https://www.continuum.io/content/conda-support-raspberry-pi-2-and-power8-le)
+
+## Installation and run
+
+* download image with Docker:
+    
+    ```docker pull movalex/rpi-jupyter-julia```
+
+* use `pi_run_julia.sh` file from this repository to start container:
+
+    `sh pi_run_julia.sh`
+
+    - Change `$HOST_WORK_DIR` to whatever folder you want to syncronize with docker container
+    - use `-v /etc/localtime:/etc/localtime:ro \` to syncronize your local date/time with image 
