@@ -1,27 +1,63 @@
 FROM movalex/rpi-jupyter-conda:latest
 USER root
-RUN apt-get update && apt-get install -y wget git
-ENV NB_USER jovyan
-ENV CONDA_DIR /opt/conda
-ENV PATH $CONDA_DIR/bin:$PATH
-ENV SHELL /bin/bash
-ENV DEBIAN_FRONTEND noninteractive
-ENV NB_UID 1000
-ENV HOME /home/$NB_USER
-# Required for pandas hdf5, sci-pi
-RUN apt-get install -y libhdf5-dev liblapack-dev gfortran
-#julia dependencies
-RUN echo "deb http://ppa.launchpad.net/staticfloat/juliareleases/ubuntu trusty main" > /etc/apt/sources.list.d/julia.list && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3D3D3ACC && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-    julia unzip \
-    libnettle4 && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
-USER $NB_USER 
+RUN apt-get update && apt-get upgrade && apt-get install -y \
+        curl \
+        git \
+        vim \
+        tzdata \
+        build-essential \
+        libhdf5-dev \
+        liblapack-dev \
+        gfortran \
+        libzmq3 \
+        libfreetype6-dev \
+        pkg-config \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+# g++ is required by matplotlib
+
+#julia install
+ENV JULIA_PATH /usr/local/julia
+
+# https://julialang.org/juliareleases.asc
+# Julia (Binary signing key) <buildbot@julialang.org>
+ENV JULIA_GPG 3673DF529D9049477F76B37566E3C7DC03D6E495
+
+# https://julialang.org/downloads/
+ENV JULIA_VERSION 0.6.2
+
+RUN set -ex; \
+	\
+# https://julialang.org/downloads/#julia-command-line-version
+# https://julialang-s3.julialang.org/bin/checksums/julia-0.6.2.sha256
+# this "case" statement is generated via "update.sh"
+	dpkgArch="$(dpkg --print-architecture)"; \
+	case "${dpkgArch##*-}" in \
+		armhf) tarArch='armv7l'; dirArch='armv7l'; sha256='1c37aa7cba7372d949a91de53f53609b1b0c9cbeca436eb2fe7f5083d9f62c82' ;; \
+		*) echo >&2 "error: current architecture ($dpkgArch) does not have a corresponding Julia binary release"; exit 1 ;; \
+	esac; \
+	\
+	curl -fL -o julia.tar.gz     "https://julialang-s3.julialang.org/bin/linux/${dirArch}/${JULIA_VERSION%[.-]*}/julia-${JULIA_VERSION}-linux-${tarArch}.tar.gz"; \
+	curl -fL -o julia.tar.gz.asc "https://julialang-s3.julialang.org/bin/linux/${dirArch}/${JULIA_VERSION%[.-]*}/julia-${JULIA_VERSION}-linux-${tarArch}.tar.gz.asc"; \
+	\
+	echo "${sha256} *julia.tar.gz" | sha256sum -c -; \
+	\
+	export GNUPGHOME="$(mktemp -d)"; \
+	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$JULIA_GPG"; \
+	gpg --batch --verify julia.tar.gz.asc julia.tar.gz; \
+	rm -rf "$GNUPGHOME" julia.tar.gz.asc; \
+	\
+	mkdir "$JULIA_PATH"; \
+	tar -xzf julia.tar.gz -C "$JULIA_PATH" --strip-components 1; \
+	rm julia.tar.gz
+
+ENV PATH $JULIA_PATH/bin:$PATH
+
+USER $NB_UID 
+
 # Python packages for data science
-RUN conda install --quiet --yes \
+RUN conda install --yes \
     'cython' \
     'flask' \
     'h5py' \
@@ -34,7 +70,7 @@ RUN conda install --quiet --yes \
     'scipy' \
     'sqlalchemy' \
     'sympy'  && \
-    conda clean -tipsy 
+    conda clean -tipsy
 
 RUN pip install beautifulsoup4 bokeh cloudpickle dill matplotlib \
     scikit-image seaborn statsmodels vincent xlrd nltk
@@ -45,14 +81,18 @@ RUN julia -e 'Pkg.add("IJulia")' && \
     mv $HOME/.local/share/jupyter/kernels/julia* $CONDA_DIR/share/jupyter/kernels/ && \
     chmod -R go+rx $CONDA_DIR/share/jupyter && \
     rm -rf $HOME/.local
+
 # Show Julia where conda libraries are
-# Add essential packages
 RUN echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" > /home/$NB_USER/.juliarc.jl
 
+# Add essential packages
 RUN julia -e 'Pkg.add("PyPlot")' && julia -e 'Pkg.add("RDatasets")' && julia -e 'Pkg.add("Distributions")'  
 RUN julia --startup-file=yes -e 'Pkg.add("HDF5")'
 
-# Precompile Julia pakcages
-
-RUN julia -e 'using IJulia' && julia -e 'using RDatasets' && julia -e 'using HDF5' && julia -e 'using Distributions'  && julia -e 'using PyPlot'
+# Precompile Julia packages
+RUN julia -e 'using IJulia' && \
+    julia -e 'using RDatasets' && \
+    julia -e 'using HDF5' && \
+    julia -e 'using Distributions' && \
+    julia -e 'using PyPlot'
 
