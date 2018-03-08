@@ -6,11 +6,13 @@ Build your own data-science jupyter notebook on your Raspberry Pi.
 This notebook server equipped with with Python 3.6.3 (Berryconda3 for Raspberry Pi installation)
 and it uses resin/rpi-raspbian:jessie as base image. These packages are installed:
 
+You can also play with the latest JupyterLab 0.31, just replace `tree` to `lab` in notebook URL.
+
     cython flask h5py numexpr pandas pillow pycrypto pytables scikit-learn 
     scipy sqlalchemy sympy beautifulsoup4 bokeh cloudpickle dill matplotlib
     scikit-image seaborn statsmodels vincent xlrd nltk
 
-It also has latest [iJulia 0.6.2](https://julialang.org/) notebook with all incredible stuff it goes with.
+It also has latest [Julia 0.6.2](https://julialang.org/) notebook with all incredible stuff it goes with.
 Have fun making plots with your Raspberry Pi. `Pyplot`, `Distributions`, `HDF5` and `Rdatasets` packages are preinstalled and compiled.
 
 You can easily install additional packages manually via `conda install` or `pip install`.
