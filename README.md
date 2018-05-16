@@ -1,8 +1,9 @@
 # Raspberry Pi Jupyter Docker Container for Data Scientists
-------
+
 Jupyter notebook with Python3 and Julia 0.6.2 for Raspberry Pi
+
 This image is based on [https://github.com/movalex/rpi-jupyter-conda](https://github.com/movalex/rpi-jupyter-conda).
-Build your own data-science Jupyter notebook on your Raspberry Pi. 
+Build your own data-science Jupyter notebook on your Raspberry Pi. JupyterLab is also available. To use Lab interface replace `tree` with `lab` in notebook URL.
 
 * Jupyter Notebook 5.2.x
 * Conda Python 3.x environment
@@ -12,8 +13,6 @@ Build your own data-science Jupyter notebook on your Raspberry Pi.
 
 This notebook server equipped with with Python 3.6.3 (Berryconda3 for Raspberry Pi installation)
 and it uses resin/rpi-raspbian:jessie as base image. These packages are installed:
-
-You can also play with the latest JupyterLab, just replace `tree` to `lab` in notebook URL.
 
     cython flask h5py numexpr pandas pillow pycrypto pytables scikit-learn 
     scipy sqlalchemy sympy beautifulsoup4 bokeh cloudpickle dill matplotlib
@@ -69,9 +68,9 @@ If you want to start bash session with root accesss so you could do more, use th
 
 ## Python2 kernel
 
-By default only Python3 kernel is available. If you still want to use Python2 kernel, you can create Conda Python2 enviroment. Just create new terminal window in Jupyter notebook (or login to bash session) and run: 
+By default only Python3 kernel is available. If you still want to use Python2 kernel, you can create Conda Python2 enviroment. Create new terminal window in Jupyter notebook (or login to bash session) and run: 
 
-    conda create -n py27 python=2.7.14
+    conda create -n py27 python=2.7.14
     
 Then activate new environment: 
     
