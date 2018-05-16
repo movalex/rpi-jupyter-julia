@@ -1,4 +1,4 @@
-# Raspberry Pi Jyputer Docker container for data scientists
+# Raspberry Pi Jupyter Docker Container for Data Scientists
 ------
 Jupyter notebook with Python3 and Julia 0.6.2 for Raspberry Pi
 This image is based on [https://github.com/movalex/rpi-jupyter-conda](https://github.com/movalex/rpi-jupyter-conda).
