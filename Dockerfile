@@ -25,7 +25,7 @@ ENV JULIA_PATH /usr/local/julia
 ENV JULIA_GPG 3673DF529D9049477F76B37566E3C7DC03D6E495
 
 # https://julialang.org/downloads/
-ENV JULIA_VERSION 0.6.2
+ENV JULIA_VERSION 1.0.0
 
 RUN set -ex; \
 	\
@@ -34,7 +34,7 @@ RUN set -ex; \
 # this "case" statement is generated via "update.sh"
 	dpkgArch="$(dpkg --print-architecture)"; \
 	case "${dpkgArch##*-}" in \
-		armhf) tarArch='armv7l'; dirArch='armv7l'; sha256='1c37aa7cba7372d949a91de53f53609b1b0c9cbeca436eb2fe7f5083d9f62c82' ;; \
+		armhf) tarArch='armv7l'; dirArch='armv7l'; sha256='61e855e93c3bfe5e4f486a54a4c45194f4b020922e56af5fc104ff3fd3d8e41a' ;; \
 		*) echo >&2 "error: current architecture ($dpkgArch) does not have a corresponding Julia binary release"; exit 1 ;; \
 	esac; \
 	\
@@ -95,4 +95,3 @@ RUN julia -e 'using IJulia' && \
     julia -e 'using HDF5' && \
     julia -e 'using Distributions' && \
     julia -e 'using PyPlot'
-
