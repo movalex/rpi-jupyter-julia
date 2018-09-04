@@ -62,14 +62,14 @@ RUN conda install --yes \
     'flask' \
     'h5py' \
     'numexpr' \
-    'pandas' \
     'pillow' \
     'pycrypto' \
     'pytables' \
     'scikit-learn' \
     'scipy' \
     'sqlalchemy' \
-    'sympy'  && \
+    'sympy'  \
+    'pandas=0.22' && \
     conda clean -tipsy
 
 RUN pip install beautifulsoup4 bokeh cloudpickle dill matplotlib \
@@ -77,7 +77,7 @@ RUN pip install beautifulsoup4 bokeh cloudpickle dill matplotlib \
 # Install IJulia packages as jovyan and then move the kernelspec out
 # to the system share location. Avoids problems with runtime UID change not
 # taking effect properly on the .local folder in the jovyan home dir.
-RUN julia -e 'Pkg.add("IJulia")' && \
+RUN julia -e 'import Pkg; Pkg.add("IJulia")' && \
     mv $HOME/.local/share/jupyter/kernels/julia* $CONDA_DIR/share/jupyter/kernels/ && \
     chmod -R go+rx $CONDA_DIR/share/jupyter && \
     rm -rf $HOME/.local
@@ -86,8 +86,8 @@ RUN julia -e 'Pkg.add("IJulia")' && \
 RUN echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" > /home/$NB_USER/.juliarc.jl
 
 # Add essential packages
-RUN julia -e 'Pkg.add("PyPlot")' && julia -e 'Pkg.add("RDatasets")' && julia -e 'Pkg.add("Distributions")'  
-RUN julia --startup-file=yes -e 'Pkg.add("HDF5")'
+RUN julia -e 'import Pkg; Pkg.add("PyPlot")' && julia -e 'import Pkg; Pkg.add("RDatasets")' && julia -e 'import Pkg; Pkg.add("Distributions")'  
+RUN julia --startup-file=yes -e 'import Pkg; Pkg.add("HDF5")'
 
 # Precompile Julia packages
 RUN julia -e 'using IJulia' && \
