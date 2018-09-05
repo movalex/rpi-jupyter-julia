@@ -1,38 +1,27 @@
 # Raspberry Pi Jupyter Docker Container for Data Scientists
 
-Jupyter notebook with Python3 and Julia 0.6.2 for Raspberry Pi
+Jupyter notebook with Python3 and Julia 1.0.0 for Raspberry Pi
 
 This image is based on [https://github.com/movalex/rpi-jupyter-conda](https://github.com/movalex/rpi-jupyter-conda).
-Build your own data-science Jupyter notebook on your Raspberry Pi. JupyterLab is also available. To use Lab interface replace `tree` with `lab` in notebook URL.
+Build your own data-science Jupyter notebook on your Raspberry Pi. To use JupyterLab interface replace `tree` with `lab` in your notebook URL.
 
-* Jupyter Notebook 5.2.x
-* Conda Python 3.x environment
-* gcc and g++ preinstalled
+* Jupyter Notebook 5.4.x
+* Conda Python 3.6.6 environment
+* `gcc` preinstalled
+* includes `curl, git, vim, tzdata, build-essential, gfortran, libzmq3, pkg-config`
 * pandas, matplotlib, scipy, seaborn, scikit-learn, scikit-image, sympy, cython, statsmodel, cloudpickle, dill, bokeh, beautifulsoup4, pillow pre-installed
-* Julia v0.6.x with Gadfly, RDatasets, HDF5, Distributions and PyPlot pre-installed and pre-compiled
+* Julia v1.0.0 with Gadfly, RDatasets, HDF5, Distributions and PyPlot pre-installed and pre-compiled
 
-This notebook server equipped with with Python 3.6.3 (Berryconda3 for Raspberry Pi installation)
-and it uses resin/rpi-raspbian:jessie as base image. These packages are installed:
+This notebook server equipped with with Python 3.6.6 ([https://github.com/jjhelmus/berryconda](Berryconda3))
+and it uses resin/rpi-raspbian:jessie as base image. These packages are preinstalled:
 
     cython flask h5py numexpr pandas pillow pycrypto pytables scikit-learn 
     scipy sqlalchemy sympy beautifulsoup4 bokeh cloudpickle dill matplotlib
     scikit-image seaborn statsmodels vincent xlrd nltk
 
-You can easily install additional packages manually via `conda install` or `pip install`.
-This will work with unprivileged user, since all packages are installed in `opt/conda`, owned by this user.
+You can easily install additional packages manually via `conda install` or `pip install`. This will work with unprivileged user, since all packages are installed in `opt/conda`, owned by this user.
 
-Here's a list of [all packages available](https://www.continuum.io/content/conda-support-raspberry-pi-2-and-power8-le) for Raspberry Pi via Conda:
-    
-    anaconda-client, argcomplete, astropy, bitarray, blist, boto, bsdiff4,
-    cheetah (Python 2 only), conda, conda-build, configobj, cython, cytoolz,
-    docutils, enum34 (Python 2 only), ephem, flask, grin (Python 2 only),
-    h5py, ipython, jinja2, lxml, mercurial (Python 2 only), netcdf4, networkx,
-    nltk, nose, numexpr, numpy, openpyxl, pandas, pillow, pip, ply, psutil,
-    pycosat, pycparser, pycrypto, pycurl, pyflakes, pytables, pytest, python,
-    python-dateutil, pytz, pyyaml, pyzmq (armv7l only), requests,
-    scikit-learn (armv7l only), scipy (armv7l only), setuptools, six,
-    sqlalchemy, sphinx, sympy, toolz, tornado, twisted, werkzeug, wheel
-    
+Here's a [list of Conda packages](https://anaconda.org/rpi/repo) for Raspberry Pi (channel `rpi`).
 
 ## Installation and run
 
