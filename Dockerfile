@@ -15,7 +15,6 @@ RUN apt-get update && apt-get upgrade && apt-get install -y \
         pkg-config \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
-# g++ is required by matplotlib
 
 #julia install
 ENV JULIA_PATH /usr/local/julia
@@ -30,7 +29,7 @@ ENV JULIA_VERSION 1.0.0
 RUN set -ex; \
 	\
 # https://julialang.org/downloads/#julia-command-line-version
-# https://julialang-s3.julialang.org/bin/checksums/julia-0.6.2.sha256
+# https://julialang-s3.julialang.org/bin/checksums/julia-1.0.0.sha256
 # this "case" statement is generated via "update.sh"
 	dpkgArch="$(dpkg --print-architecture)"; \
 	case "${dpkgArch##*-}" in \
@@ -87,11 +86,9 @@ RUN echo "push!(Libdl.DL_LOAD_PATH, \"$CONDA_DIR/lib\")" > /home/$NB_USER/.julia
 
 # Add essential packages
 RUN julia -e 'import Pkg; Pkg.add("PyPlot")' && julia -e 'import Pkg; Pkg.add("RDatasets")' && julia -e 'import Pkg; Pkg.add("Distributions")'  
-RUN julia --startup-file=yes -e 'import Pkg; Pkg.add("HDF5")'
 
 # Precompile Julia packages
 RUN julia -e 'using IJulia' && \
     julia -e 'using RDatasets' && \
-    julia -e 'using HDF5' && \
     julia -e 'using Distributions' && \
     julia -e 'using PyPlot'
