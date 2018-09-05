@@ -10,7 +10,7 @@ Build your own data-science Jupyter notebook on your Raspberry Pi. To use Jupyte
 * `gcc` preinstalled
 * includes `curl, git, vim, tzdata, build-essential, gfortran, libzmq3, pkg-config`
 * pandas, matplotlib, scipy, seaborn, scikit-learn, scikit-image, sympy, cython, statsmodel, cloudpickle, dill, bokeh, beautifulsoup4, pillow pre-installed
-* Julia v1.0.0 with Gadfly, RDatasets, HDF5, Distributions and PyPlot pre-installed and pre-compiled
+* Julia v1.0.0 with Gadfly, RDatasets, Distributions and PyPlot pre-installed and pre-compiled
 
 This notebook server equipped with with Python 3.6.6 ([https://github.com/jjhelmus/berryconda](Berryconda3))
 and it uses resin/rpi-raspbian:jessie as base image. These packages are preinstalled:
